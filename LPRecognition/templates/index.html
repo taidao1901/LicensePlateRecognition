@@ -49,8 +49,8 @@
         </div>
       </div>
       <div class="col s12 dt-container">
-        <div class="card uf-card" id ="result-image" >
-
+        <div class="card dt-card" id ="detect-image" >
+          <img class="card crop" id="img-card-2" scr="" />
         </div>
 
         <div class="waves-effect waves-light btn button" id="show">
@@ -58,11 +58,17 @@
         </div>
       </div>
         <div class="col s12 it-container">
-          <div class="card it-card">
-            <img id="#img-card-2" src="" class="center-1"/>
+          <div class="card it-card" id ="recognition-image" >
+            <img class="card crop" id="img-card-3" scr=""/>
           </div>
-          <div class="waves-effect waves-light btn button" id="go-start">
-          <span>Choose a new file</span>
+
+          <div class=" waves-light " id="result">
+            <span class="result-text" id="result_text"></span>
+          </div>
+
+          <div class="waves-effect waves-light btn" id="go-start">
+            <span>Choose a new file</span>
+          </div> 
           </div>
         </div>
 

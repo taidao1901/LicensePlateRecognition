@@ -67,7 +67,8 @@ body {
   }
   
   .dt-card {
-    overflow-y: auto;
+    /* overflow-y: auto; */
+    margin-bottom: 40px;
   }  
 
   #drop-container {
@@ -129,7 +130,7 @@ body {
   font-family: "Georgia", serif;
     background-color: #171B19;
     position: absolute;
-    bottom: -50px;
+    bottom: -100px;
     width: calc(100% - 20px);
   }
 
@@ -140,11 +141,34 @@ body {
     bottom: -50px;
     width: calc(100% - 20px);
   }
+  #result {
+    background-color: #171B19;
+    position: absolute;
+    bottom: -50px;
+    width: calc(100% - 20px);
+    text-align: center;
+  }
+  .result-text{
+    
+    color: white;
+    font-family: "Georgia", serif;
+    size: 15;
+  }
+  .flex-container {
+    display: flex;
+    flex-direction: column;
+}
+.flex-child {
+  flex: 1;
+  border: 2px solid yellow;
+}  
+
 
 
 
   #img-card-1,
-  #img-card-2 {
+  #img-card-2,
+  #img-card-3 {
   background-color: #171B19;
     max-width: 100%;
     max-height: 100%;
@@ -212,7 +236,7 @@ body {
   max-height: 100%;
   display: block;
   align:center;
-    }
+  }
 
 
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .Fastyolov2 import detect_LP_darknet
+from .DeepLearningModel import end2end
 import io
 from PIL import Image
 from io import BytesIO
@@ -12,7 +12,7 @@ from base64 import b64decode,b64encode
 # Create your views here.
 
 @csrf_exempt
-def LPdetection_api(api_request):
+def LPRecognition_api(api_request):
     json_object = {'success': False}
     if api_request.method == "POST":
 
@@ -21,19 +21,21 @@ def LPdetection_api(api_request):
             data = b64decode(base64_data)
 
             data = np.array(Image.open(io.BytesIO(data)))
-            result, result_img, time = detect_LP_darknet.detection(data)
+            result, detect_image, recog_image, time = end2end.end2end(data)
 
         elif api_request.FILES.get("image", None) is not None:
             image_api_request = api_request.FILES["image"]
             image_bytes = image_api_request.read()
             image = Image.open(io.BytesIO(image_bytes))
-            result, result_img, time= detect_LP_darknet.detection(image)
+            result, detect_image, recog_image, time = end2end.end2end(image)
 
     if result:
         json_object['success']=True
-    json_object['time']=str((time))+" seconds"
-    json_object['object']= str(result)
-    json_object['result_img']= image2base64(result_img)
+        print(result)
+    json_object['result'] = str(result)
+    json_object['time']=str(round(time))+" seconds"
+    json_object['detect_image']= image2base64(detect_image)
+    json_object['recog_image']= image2base64(recog_image)
     return JsonResponse(json_object)
 
 def detect_request(api_request):
