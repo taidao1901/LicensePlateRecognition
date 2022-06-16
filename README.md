@@ -5,12 +5,12 @@
  git clone https://github.com/taidao1901/LicensePlateRecognition.git
 ```
 2. Tạo Conda env bằng 2 cách:
- 1.1. Cách 1: Clone y chang cái env t tạo
+ - 1.1. Cách 1: Clone y chang cái env t tạo
 
  ```
     conda env create -f enviroment.yml 
  ```
- 1.2. Cách 2: Cài các gói giống t
+ - 1.2. Cách 2: Cài các gói giống t
  B1: Khởi tạo môi trường
  ```
     conda create --name <tên env> python=3.9.12
