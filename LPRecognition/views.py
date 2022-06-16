@@ -31,9 +31,10 @@ def LPRecognition_api(api_request):
 
     if result:
         json_object['success']=True
-        print(result)
+        print(time)
     json_object['result'] = str(result)
-    json_object['time']=str(round(time))+" seconds"
+    json_object['time']=str(round(time,3))+" seconds"
+    print(json_object['time'])
     json_object['detect_image']= image2base64(detect_image)
     json_object['recog_image']= image2base64(recog_image)
     return JsonResponse(json_object)
