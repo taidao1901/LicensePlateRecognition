@@ -175,7 +175,8 @@ body {
     display: block;
   }
   
-  .crop {
+  .crop
+  {
     object-fit: scale-down;
     object-position: center;
     width: 100%;

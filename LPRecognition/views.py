@@ -15,11 +15,10 @@ from base64 import b64decode,b64encode
 def LPRecognition_api(api_request):
     json_object = {'success': False}
     if api_request.method == "POST":
-
+        # Nhận thông tin của hình ảnh người dùng dưới dạng base64 rồi convert về dạng np.array
         if api_request.POST.get("image64", None) is not None:
             base64_data = api_request.POST.get("image64", None).split(',', 1)[1]
             data = b64decode(base64_data)
-
             data = np.array(Image.open(io.BytesIO(data)))
             result, detect_image, recog_image, time = end2end.end2end(data)
 
@@ -28,13 +27,11 @@ def LPRecognition_api(api_request):
             image_bytes = image_api_request.read()
             image = Image.open(io.BytesIO(image_bytes))
             result, detect_image, recog_image, time = end2end.end2end(image)
-
     if result:
         json_object['success']=True
-        print(time)
+    # Đóng gói các thông tin: dãy kí tự, thời gian xử lí, ảnh kết quả detect biển số, ảnh kết quả nhận dạng biển số
     json_object['result'] = str(result)
     json_object['time']=str(round(time,3))+" seconds"
-    print(json_object['time'])
     json_object['detect_image']= image2base64(detect_image)
     json_object['recog_image']= image2base64(recog_image)
     return JsonResponse(json_object)

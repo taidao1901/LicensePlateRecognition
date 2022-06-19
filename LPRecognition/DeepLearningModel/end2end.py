@@ -18,7 +18,6 @@ def draw_prediction(img, class_id, confidence, x, y, x_plus_w, y_plus_h, classes
     label = str(classes[class_id]) + " " + str(round(confidence, 4) * 100) + "%"
     color = COLORS[class_id]
     
-    
     if text== True:    
         cv2.rectangle(img, (x, y), (x_plus_w, y_plus_h), color, 2)
         cv2.putText(img, label, (x - 10, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
@@ -30,7 +29,7 @@ def plot_object_boxes(img, boxes, classes,text= True):
     clone = img.copy()
     for box in boxes:
         class_id, confidence, tl_x, tl_y, br_x, br_y = box
-        draw_prediction(clone, class_id, confidence, round(tl_x), round(tl_y), round(br_x), round(br_y), classes,text)
+        draw_prediction(clone, class_id, round(confidence,2), round(tl_x), round(tl_y), round(br_x), round(br_y), classes,text)
     return clone
 
 def load_networks(cfg_path, weight_path):
@@ -43,17 +42,18 @@ def get_result_predict(img, net,dim, conf_threshold = 0.5, nms_threshold=0.4):
     height, width = img.shape[:2]
     scale = 1/255.0
     # Đưa ảnh vào blob object
+    start = time.time()
     blob = cv2.dnn.blobFromImage(img, scale, dim, (0, 0, 0), True, crop=False)
+    
     net.setInput(blob)
     # Get output
-    outs = net.forward(get_output_layers(net))
-
     
+    outs = net.forward(get_output_layers(net))
+ 
     class_ids = []
     confidences = []
     boxes = []
 
-    start = time.time()
     # print(outs)
     for out in outs:
         for detection in out:
@@ -84,10 +84,12 @@ def get_result_predict(img, net,dim, conf_threshold = 0.5, nms_threshold=0.4):
         result.append([class_ids[i], confidences[i], x, y, x + w, y + h])
 
     end = time.time()
-    #print("YOLO Execution time: " + str(end-start))
-    
-    # Trả về topleft và bottomright [class_ids, confidences, x, y, x + w, y + h], time
     return result, end-start
+
+def detection(image,net,classes):
+    boxes,time = get_result_predict(image, net, dim = (416,416))
+    show_img=plot_object_boxes(image, boxes, classes)
+    return boxes, show_img, time
 
 def recognition(image,net,classes):
     pred_chars,time = get_result_predict(image, net,dim = (352,128),conf_threshold = 0.5, nms_threshold=0.1)
@@ -106,37 +108,28 @@ def recognition(image,net,classes):
     show_img=plot_object_boxes(image, pred_chars, classes,text=False)
     return result, show_img, time
 
-def detection(image,net,classes):
-    boxes,time = get_result_predict(image, net,dim = (416,416))
-    show_img=plot_object_boxes(image, boxes, classes)
-    return boxes, show_img, time
 
 def end2end(image):
     #Load fast-yolov2 model
     cfg_pathyolov2 = os.path.join(__location__, 'Fastyolov2/fast-yolov2.cfg')
     weight_pathyolov2 = os.path.join(__location__, 'Fastyolov2/fast-yolov2_best.weights')
     with open(os.path.join(__location__, 'Fastyolov2/yolo.names'), 'r') as f:
-        classesDetection = [line.strip() for line in f.readlines()]
-    NetDetection= load_networks(cfg_pathyolov2, weight_pathyolov2)
+        Detectclasses = [line.strip() for line in f.readlines()]
+    DetectNet= load_networks(cfg_pathyolov2, weight_pathyolov2)
 
     #Load CR-Net model 
     cfg_pathCR = os.path.join(__location__,"CR_Net/crnet.cfg")
     weight_pathCR =os.path.join(__location__, "CR_Net/crnet_best.weights")
     with open(os.path.join(__location__,"CR_Net/crnet.names"), 'r') as f:
-        classesRecognition = [line.strip() for line in f.readlines()]
-    NetRecognition = load_networks(cfg_pathCR, weight_pathCR)
+        Recogclasses = [line.strip() for line in f.readlines()]
+    RecogNet = load_networks(cfg_pathCR, weight_pathCR)
 
-    # License Plate Detection 
-    boxes, detect_image, time4detection= detection(image,NetDetection,classesDetection)
-    # recog_images=np.array()
-    for box in boxes:
-        class_id, confidence, tl_x_bs, tl_y_bs, br_x_bs, br_y_bs = box
-        lp_image = image[round(tl_y_bs):round(br_y_bs), round(tl_x_bs):round(br_x_bs)]
-        result, recog_image, time = recognition(lp_image,NetRecognition,classesRecognition)
-        # results.append(result)
-        # recog_images= recog_image if recog_images==
-        # recog_time+=time
-        return result, detect_image, recog_image, time+ time4detection
+    # License Plate Detection and Recognition
+    boxes, detect_image, time4detect = detection(image,DetectNet,Detectclasses)
+    class_id, confidence, tl_x_bs, tl_y_bs, br_x_bs, br_y_bs = boxes[0]
+    lp_image = image[round(tl_y_bs):round(br_y_bs), round(tl_x_bs):round(br_x_bs)]
+    result, recog_image, time4recog = recognition(lp_image,RecogNet,Recogclasses)
+    return result, detect_image, recog_image, time4recog+time4detect
 
 
 

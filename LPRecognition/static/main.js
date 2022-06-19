@@ -41,9 +41,8 @@ $(document).ready(function() {
     switchCard(0);
   });
    $('#go-start').click(function() {
-    $(document).ready(function(){
-      $('.card crop').remove();
-    });
+    $('#img-card-1').removeAttr("src");
+
     $('#stat-table').html('');
     switchCard(0);
   });
@@ -52,7 +51,9 @@ $(document).ready(function() {
     switchCard(3);
     if(datas["success"] == true){
       $('#img-card-3').attr('src',datas['recog_image']);
-      document.getElementById("result_text").innerHTML = datas["result"];
+      document.getElementById("result_text").innerHTML = datas['result'];
+      document.getElementById("time_text").innerHTML = datas['time'];
+      console.log(datas['time']);
   }
 });
 
