@@ -1,11 +1,11 @@
 # License Plate Recognition
 # Hướng dẫn sử dụng: 
-1. Clone git này về nhá : 
+1. Clone git : 
 ```
  git clone https://github.com/taidao1901/LicensePlateRecognition.git
 ```
 2. Tạo Conda env bằng 2 cách:
- - 1.1. Cách 1: Clone y chang cái env gốc
+ - 1.1. Cách 1:
 
  ```
     conda env create -f enviroment.yml 
@@ -24,7 +24,7 @@
     pip install -r requirements.txt
  ```
 
-3. vào vs code bấm tổ hợp: ctrl+shift+p --> python:select interpreter --> chọn vào tên môi trường mới tạo
+3. Vào vscode bấm tổ hợp: ctrl+shift+p --> python:select interpreter --> chọn vào tên môi trường mới tạo
 
 4. Khởi động server bằng lệnh
 ```
