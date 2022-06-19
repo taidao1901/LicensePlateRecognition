@@ -92,7 +92,20 @@ def detection(image,net,classes):
     return boxes, show_img, time
 
 def recognition(image,net,classes):
-    pred_chars,time = get_result_predict(image, net,dim = (352,128),conf_threshold = 0.5, nms_threshold=0.1)
+     # Swap kí tự
+    ## Chữ sang số
+    char2num = {'A':'4', 'B': '8', 'D':'0', 'G':'6', 'S':'5', 'Z':'7'}
+    ## Số sang chữ
+    num2char = {'0':'D', '2':'Z', '4':'A', '5':'S', '6':'G', '7':'Z', '8':'B'}
+
+    pred_chars,time = get_result_predict(image, net,dim = (352,128),conf_threshold = 0.5, nms_threshold=0.3)
+            # Nếu số kí tự bé hơn 8 thì cho predict lại với conf_threshold thấp hơn
+    if len(pred_chars) < 8:
+        pred_chars = get_result_predict(lp_image, net_reco, conf_threshold = 0.1, nms_threshold=0.5)
+    # Nếu số kí tự hớn hơn 9 thì chọn 9 kí tự có conf lớn nhất
+    if len(pred_chars) > 9:
+        pred_chars = sorted(pred_chars, key=lambda x: x[1])[::-1][:9]
+
     first_line = []
     second_line = []
     h, w = image.shape[:2]
@@ -106,7 +119,25 @@ def recognition(image,net,classes):
     second_line = sorted(second_line, key=lambda x:x[2])
     result = "".join([*[classes[x[0]] for x in first_line]," ",*[classes[y[0]] for y in second_line]])
     show_img=plot_object_boxes(image, pred_chars, classes,text=False)
-    return result, show_img, time
+        # Thực hiện heuristic rule
+    final_result = ""
+    if 8 <= len(result) <= 9:
+        for idx, c in enumerate(result):
+            if idx == 2:
+                if result[idx] in num2char.keys():
+                    final_result += num2char[result[idx]]
+                else:
+                    final_result += c
+            elif idx == 3:
+                final_result += c
+            else:
+                if result[idx] in char2num.keys():
+                    final_result += char2num[result[idx]]
+                else:
+                    final_result += c
+    else:
+        final_result = result
+    return final_result, show_img, time
 
 
 def end2end(image):
