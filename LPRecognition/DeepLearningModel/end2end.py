@@ -101,7 +101,7 @@ def recognition(image,net,classes):
     pred_chars,time = get_result_predict(image, net,dim = (352,128),conf_threshold = 0.5, nms_threshold=0.3)
             # Nếu số kí tự bé hơn 8 thì cho predict lại với conf_threshold thấp hơn
     if len(pred_chars) < 8:
-        pred_chars = get_result_predict(lp_image, net_reco, conf_threshold = 0.1, nms_threshold=0.5)
+        pred_chars = get_result_predict(image, net, dim = (352,128),conf_threshold = 0.1, nms_threshold=0.5)
     # Nếu số kí tự hớn hơn 9 thì chọn 9 kí tự có conf lớn nhất
     if len(pred_chars) > 9:
         pred_chars = sorted(pred_chars, key=lambda x: x[1])[::-1][:9]
