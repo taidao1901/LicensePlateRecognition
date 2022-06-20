@@ -15,7 +15,7 @@
     conda activate <tên env>
     pip install -r requirements.txt
  ```
-### Khởi động server bằng lệnh
+## Khởi động server bằng lệnh
 Trỏ tới LicensePlateRecognition_RESTAPI
 ```
 python manage.py runserver
