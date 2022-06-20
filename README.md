@@ -11,7 +11,6 @@
     conda env create -f enviroment.yml 
  ```
  ###Cách 2:
-  + B1: Khởi tạo môi trường
  ```
     conda create --name <tên env> python=3.9.12
     conda activate <tên env>
