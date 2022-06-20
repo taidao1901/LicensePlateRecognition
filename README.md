@@ -1,10 +1,9 @@
 # License Plate Recognition
-# Hướng dẫn sử dụng: 
 ## Clone git : 
 ```
  git clone https://github.com/taidao1901/LicensePlateRecognition.git
 ```
-## Tạo Conda env bằng 2 cách:
+## Khởi tạo môi trường
  ### Cách 1:
 
  ```
@@ -17,7 +16,7 @@
     pip install -r requirements.txt
  ```
 ### Khởi động server bằng lệnh
-cd to LicensePlateRecognition_RESTAPI
+Trỏ tới LicensePlateRecognition_RESTAPI
 ```
 python manage.py runserver
 ```
