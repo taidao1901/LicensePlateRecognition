@@ -24,9 +24,7 @@
     pip install -r requirements.txt
  ```
 
-3. Vào vscode bấm tổ hợp: ctrl+shift+p --> python:select interpreter --> chọn vào tên môi trường mới tạo
-
-4. Khởi động server bằng lệnh
+### Khởi động server bằng lệnh
 ```
 python manage.py runserver
 ```
