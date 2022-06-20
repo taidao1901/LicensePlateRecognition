@@ -14,16 +14,9 @@
   + B1: Khởi tạo môi trường
  ```
     conda create --name <tên env> python=3.9.12
- ```
- + B2: Khởi chạy môi trường
- ```
     conda activate <tên env>
- ```
- + B3: Cài các gói giống với môi trường gốc:
- ```
     pip install -r requirements.txt
  ```
-
 ### Khởi động server bằng lệnh
 ```
 python manage.py runserver
